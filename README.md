@@ -33,7 +33,7 @@ The `accessToken` can be generated as follows:
 ```bash
 curl --request POST \
   --url 'https://auth.development.opexa.io/sessions?ttl=24h' \
-  --header 'authorization: Basic e3tPUEVSQVRPUl9OQU1FfX06e3tPUEVSQVRPUl9QQVNTV09SRH19' \
+  --header 'authorization: Basic YmFieWVuZ2luZWVyOjVlODg0ODk4ZGEyODA0NzE1MWQwZTU2ZjhkYzYyOTI3NzM2MDNkMGQ2YWFiYmRkNjJhMTFlZjcyMWQxNTQyZDg=' \
   --header 'platform-code: Z892' \
   --header 'role: OPERATOR'
 ```
