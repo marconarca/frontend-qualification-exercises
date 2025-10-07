@@ -3,7 +3,6 @@
 import { Badge } from '@/components/ui/badge';
 import type { Member } from '@/lib/types/member';
 import { cn } from '@/lib/utils/cn';
-import { AlertCircle, Ban, CheckCircle2 } from 'lucide-react';
 import {
   formatCurrency,
   formatPhone,
@@ -12,6 +11,7 @@ import {
   getAccountBadgeVariant,
   getVerificationBadgeVariant,
 } from '@/lib/utils/format';
+import { AlertCircle, Ban, CheckCircle2 } from 'lucide-react';
 
 type MembersTableProps = {
   members: Member[];
@@ -41,6 +41,12 @@ const statusIconMap: Record<Member['status'], React.ReactNode> = {
   Active: <CheckCircle2 className="h-3.5 w-3.5" />,
   Blocklisted: <AlertCircle className="h-3.5 w-3.5" />,
   Disabled: <Ban className="h-3.5 w-3.5" />,
+};
+
+const statusBackgroundMap: Record<Member['status'], string> = {
+  Active: 'bg-[#053321] border-transparent',
+  Blocklisted: 'bg-[#55160C] border-transparent',
+  Disabled: 'bg-[#161B26] border-transparent text-neutral',
 };
 
 export const MembersTable = ({
@@ -137,7 +143,7 @@ export const MembersTable = ({
               <td className="px-4 py-3">
                 <Badge
                   variant={getAccountBadgeVariant(member.status)}
-                  className="gap-2"
+                  className={cn('gap-2', statusBackgroundMap[member.status])}
                 >
                   <span className="flex h-4 w-4 items-center justify-center">
                     {statusIconMap[member.status]}
