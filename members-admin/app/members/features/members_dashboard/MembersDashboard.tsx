@@ -37,10 +37,9 @@ export const MembersDashboard = ({ adminName }: MembersDashboardProps) => {
     <div className="mx-auto flex min-h-screen w-full max-w-screen-xl flex-col px-6 py-10">
       <header className="flex flex-col gap-4 rounded-lg border border-border bg-background/80 p-6 shadow-lg backdrop-blur md:flex-row md:items-center md:justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Members Overview</h1>
+          <h1 className="text-3xl font-bold">Members</h1>
           <p className="mt-1 text-sm text-muted">
-            Welcome back, {adminName}. Review member activity, verification
-            progress, and account statuses in real time.
+            View your members here. {adminName}
           </p>
         </div>
         <form action={signOut}>
