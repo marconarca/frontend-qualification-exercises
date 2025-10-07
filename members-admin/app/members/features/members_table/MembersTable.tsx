@@ -1,5 +1,6 @@
 'use client';
 
+import { Badge } from '@/components/ui/badge';
 import type { Member } from '@/lib/types/member';
 import {
   formatCurrency,
@@ -9,7 +10,6 @@ import {
   getAccountBadgeVariant,
   getVerificationBadgeVariant,
 } from '@/lib/utils/format';
-import { Badge } from '@/components/ui/badge';
 
 type MembersTableProps = {
   members: Member[];
@@ -43,11 +43,7 @@ export const MembersTable = ({
   }
 
   if (error) {
-    return (
-      <div className="p-6 text-center text-sm text-error">
-        {error}
-      </div>
-    );
+    return <div className="p-6 text-center text-sm text-error">{error}</div>;
   }
 
   if (!loading && members.length === 0) {
@@ -62,7 +58,7 @@ export const MembersTable = ({
     <div className="overflow-x-auto">
       <table className="min-w-full divide-y divide-border">
         <thead>
-          <tr className="bg-neutral/5 text-left text-xs uppercase tracking-wide text-muted">
+          <tr className="bg-background-secondary text-left text-xs uppercase tracking-wide text-muted border-b border-neutral/30">
             {headers.map((header) => (
               <th key={header} className="px-4 py-3 font-medium">
                 {header}
@@ -70,38 +66,42 @@ export const MembersTable = ({
             ))}
           </tr>
         </thead>
-        <tbody className="divide-y divide-border text-sm">
+        <tbody className="text-sm bg-background-secondary">
           {members.map((member) => (
             <tr
               key={member.id}
-              className="transition hover:bg-neutral/10"
+              className="transition hover:bg-neutral/10 border-b border-neutral/30"
             >
               <td className="px-4 py-3">
-                <div className="font-medium">{member.name}</div>
+                <div className="font-medium text-[12px]">{member.name}</div>
                 <p className="text-xs text-muted">{member.username}</p>
               </td>
               <td className="px-4 py-3">
                 <Badge
                   variant={getVerificationBadgeVariant(
-                    member.verificationStatus,
+                    member.verificationStatus
                   )}
                 >
                   {member.verificationStatus}
                 </Badge>
               </td>
-              <td className="px-4 py-3">{formatCurrency(member.balance)}</td>
+              <td className="px-4 py-3 text-muted text-[12px]">
+                {formatCurrency(member.balance)}
+              </td>
               <td className="px-4 py-3">
                 <a
-                  className="text-secondary underline-offset-4 hover:underline"
+                  className="text-muted underline-offset-4 hover:underline text-[12px]"
                   href={`mailto:${member.email}`}
                 >
                   {member.email}
                 </a>
               </td>
-              <td className="px-4 py-3">{formatPhone(member.mobile)}</td>
+              <td className="px-4 py-3 text-muted text-[12px]">
+                {formatPhone(member.mobile)}
+              </td>
               <td className="px-4 py-3">
                 <a
-                  className="text-secondary underline-offset-4 hover:underline"
+                  className="text-muted underline-offset-4 hover:underline text-[12px]"
                   href={member.domain}
                   target="_blank"
                   rel="noreferrer"
@@ -109,13 +109,17 @@ export const MembersTable = ({
                   {member.domain}
                 </a>
               </td>
-              <td className="px-4 py-3">{formatDate(member.dateRegistered)}</td>
+              <td className="px-4 py-3 text-muted text-[12px]">
+                {formatDate(member.dateRegistered)}
+              </td>
               <td className="px-4 py-3">
                 <Badge variant={getAccountBadgeVariant(member.status)}>
                   {member.status}
                 </Badge>
               </td>
-              <td className="px-4 py-3">{formatDateTime(member.lastActive)}</td>
+              <td className="px-4 py-3 text-muted text-[12px]">
+                {formatDateTime(member.lastActive)}
+              </td>
             </tr>
           ))}
         </tbody>

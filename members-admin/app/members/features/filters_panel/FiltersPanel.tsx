@@ -118,7 +118,7 @@ export const FiltersPanel = ({
   }, [filters]);
 
   return (
-    <section className="relative z-20 rounded-lg border border-border bg-background-secondary shadow-lg backdrop-blur">
+    <section className="relative z-20 rounded-t-lg border border-neutral/30 bg-background-secondary shadow-lg backdrop-blur">
       <div className="flex justify-end px-4 pt-4">
         <Button
           type="button"
@@ -187,7 +187,8 @@ export const FiltersPanel = ({
             <CommandList>
               <CommandGroup>
                 {['Verified', 'Pending', 'Unverified'].map((option) => {
-                  const isActive = filters.verificationStatuses.includes(option);
+                  const isActive =
+                    filters.verificationStatuses.includes(option);
                   return (
                     <CommandItem
                       key={option}
@@ -195,7 +196,7 @@ export const FiltersPanel = ({
                         onFiltersChange({
                           verificationStatuses: isActive
                             ? filters.verificationStatuses.filter(
-                                (statusOption) => statusOption !== option,
+                                (statusOption) => statusOption !== option
                               )
                             : [...filters.verificationStatuses, option],
                         })
@@ -396,7 +397,9 @@ export const FiltersPanel = ({
                       onSelect={() =>
                         onFiltersChange({
                           statuses: isActive
-                            ? filters.statuses.filter((status) => status !== option)
+                            ? filters.statuses.filter(
+                                (status) => status !== option
+                              )
                             : [...filters.statuses, option],
                         })
                       }

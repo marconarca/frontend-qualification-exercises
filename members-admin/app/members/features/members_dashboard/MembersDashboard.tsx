@@ -34,7 +34,7 @@ export const MembersDashboard = ({ adminName }: MembersDashboardProps) => {
   );
 
   return (
-    <div className="mx-auto flex min-h-screen w-full max-w-screen-xl flex-col gap-6 px-6 py-10">
+    <div className="mx-auto flex min-h-screen w-full max-w-screen-xl flex-col px-6 py-10">
       <header className="flex flex-col gap-4 rounded-lg border border-border bg-background/80 p-6 shadow-lg backdrop-blur md:flex-row md:items-center md:justify-between">
         <div>
           <h1 className="text-3xl font-bold">Members Overview</h1>
@@ -58,9 +58,9 @@ export const MembersDashboard = ({ adminName }: MembersDashboardProps) => {
         onReset={resetFilters}
       />
 
-      <section className="rounded-lg border border-border bg-background/80 p-0 shadow-lg backdrop-blur">
+      <section className=" bg-background/80 p-0 shadow-lg backdrop-blur border-l border-b border-r border-neutral/30">
         <MembersTable members={members} loading={loading} error={error} />
-        <div className="border-t border-border px-4 py-3">
+        <div className="border-t border-border px-4 py-3 bg-background-secondary">
           <PaginationControls
             page={pagination.page}
             pageSize={pagination.pageSize}
