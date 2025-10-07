@@ -2,11 +2,13 @@
 
 import { Badge } from '@/components/ui/badge';
 import type { Member } from '@/lib/types/member';
+import { cn } from '@/lib/utils/cn';
+import { AlertCircle, Ban, CheckCircle2 } from 'lucide-react';
 import {
   formatCurrency,
-  formatDate,
-  formatDateTime,
   formatPhone,
+  formatReversedDate,
+  formatReversedDateTime,
   getAccountBadgeVariant,
   getVerificationBadgeVariant,
 } from '@/lib/utils/format';
@@ -28,6 +30,18 @@ const headers = [
   'Status',
   'Last Active',
 ];
+
+const verificationDotColors: Record<Member['verificationStatus'], string> = {
+  Verified: 'bg-success',
+  Pending: 'bg-warning',
+  Unverified: 'bg-error',
+};
+
+const statusIconMap: Record<Member['status'], React.ReactNode> = {
+  Active: <CheckCircle2 className="h-3.5 w-3.5" />,
+  Blocklisted: <AlertCircle className="h-3.5 w-3.5" />,
+  Disabled: <Ban className="h-3.5 w-3.5" />,
+};
 
 export const MembersTable = ({
   members,
@@ -81,8 +95,16 @@ export const MembersTable = ({
                   variant={getVerificationBadgeVariant(
                     member.verificationStatus
                   )}
+                  className="gap-2"
                 >
-                  {member.verificationStatus}
+                  <span
+                    aria-hidden="true"
+                    className={cn(
+                      'h-2.5 w-2.5 rounded-full',
+                      verificationDotColors[member.verificationStatus]
+                    )}
+                  />
+                  <span>{member.verificationStatus}</span>
                 </Badge>
               </td>
               <td className="px-4 py-3 text-muted text-[12px]">
@@ -110,15 +132,21 @@ export const MembersTable = ({
                 </a>
               </td>
               <td className="px-4 py-3 text-muted text-[12px]">
-                {formatDate(member.dateRegistered)}
+                {formatReversedDate(member.dateRegistered)}
               </td>
               <td className="px-4 py-3">
-                <Badge variant={getAccountBadgeVariant(member.status)}>
-                  {member.status}
+                <Badge
+                  variant={getAccountBadgeVariant(member.status)}
+                  className="gap-2"
+                >
+                  <span className="flex h-4 w-4 items-center justify-center">
+                    {statusIconMap[member.status]}
+                  </span>
+                  <span>{member.status}</span>
                 </Badge>
               </td>
               <td className="px-4 py-3 text-muted text-[12px]">
-                {formatDateTime(member.lastActive)}
+                {formatReversedDateTime(member.lastActive)}
               </td>
             </tr>
           ))}
