@@ -1,0 +1,168 @@
+{
+  "admins": [
+    {
+      "id": 1,
+      "username": "admin",
+      "password": "admin123",
+      "name": "Dashboard Admin"
+    }
+  ],
+  "members": [
+    {
+      "id": 1,
+      "name": "Alicia Reyes",
+      "username": "a_reyes",
+      "verificationStatus": "Verified",
+      "balance": 23540.72,
+      "email": "alicia.reyes@scaleforge.tech",
+      "mobile": "+639178020145",
+      "domain": "https://scaleforge.tech",
+      "dateRegistered": "2023-01-12T10:15:00Z",
+      "status": "Active",
+      "lastActive": "2024-09-12T04:35:20Z"
+    },
+    {
+      "id": 2,
+      "name": "Benjamin Cruz",
+      "username": "bcruz",
+      "verificationStatus": "Pending",
+      "balance": 9820.0,
+      "email": "ben.cruz@crazywin.ph",
+      "mobile": "+639268110973",
+      "domain": "https://crazywin.ph/19",
+      "dateRegistered": "2022-11-04T07:42:00Z",
+      "status": "Active",
+      "lastActive": "2024-06-01T16:22:18Z"
+    },
+    {
+      "id": 3,
+      "name": "Chloe Dizon",
+      "username": "chloe_d",
+      "verificationStatus": "Unverified",
+      "balance": 420.45,
+      "email": "chloe.dizon@orbitplay.gg",
+      "mobile": "+639558103221",
+      "domain": "https://orbitplay.gg",
+      "dateRegistered": "2023-05-27T18:09:00Z",
+      "status": "Disabled",
+      "lastActive": "2024-03-19T11:05:10Z"
+    },
+    {
+      "id": 4,
+      "name": "Diego Ramos",
+      "username": "diegoR",
+      "verificationStatus": "Verified",
+      "balance": 125.1,
+      "email": "diego.r@bossarena.gg",
+      "mobile": "+639178820987",
+      "domain": "https://bossarena.gg",
+      "dateRegistered": "2021-09-01T09:05:00Z",
+      "status": "Blocklisted",
+      "lastActive": "2024-01-28T02:14:00Z"
+    },
+    {
+      "id": 5,
+      "name": "Emma Soriano",
+      "username": "emma_s",
+      "verificationStatus": "Verified",
+      "balance": 18750.89,
+      "email": "emma@fluxbets.com",
+      "mobile": "+639158991122",
+      "domain": "https://fluxbets.com",
+      "dateRegistered": "2023-07-08T22:08:00Z",
+      "status": "Active",
+      "lastActive": "2024-09-10T07:45:33Z"
+    },
+    {
+      "id": 6,
+      "name": "Felix Navarro",
+      "username": "f_nav",
+      "verificationStatus": "Pending",
+      "balance": 605.88,
+      "email": "felix.navarro@scaleforge.tech",
+      "mobile": "+639772308165",
+      "domain": "https://scaleforge.tech",
+      "dateRegistered": "2024-01-15T12:32:00Z",
+      "status": "Disabled",
+      "lastActive": "2024-05-02T08:12:45Z"
+    },
+    {
+      "id": 7,
+      "name": "Gina Mercado",
+      "username": "ginamerc",
+      "verificationStatus": "Verified",
+      "balance": 705.55,
+      "email": "gina.mercado@crazywin.ph",
+      "mobile": "+639418002245",
+      "domain": "https://crazywin.ph/19",
+      "dateRegistered": "2022-02-20T13:19:00Z",
+      "status": "Active",
+      "lastActive": "2024-09-18T15:30:11Z"
+    },
+    {
+      "id": 8,
+      "name": "Hector Panganiban",
+      "username": "hec_pan",
+      "verificationStatus": "Unverified",
+      "balance": 50.0,
+      "email": "hector.pan@orbitplay.gg",
+      "mobile": "+639675551209",
+      "domain": "https://orbitplay.gg",
+      "dateRegistered": "2024-03-03T04:51:00Z",
+      "status": "Active",
+      "lastActive": "2024-06-30T22:01:59Z"
+    },
+    {
+      "id": 9,
+      "name": "Isabel Quinto",
+      "username": "iquinto",
+      "verificationStatus": "Verified",
+      "balance": 30950.0,
+      "email": "isabel.quinto@vegasfrontier.io",
+      "mobile": "+639921234567",
+      "domain": "https://vegasfrontier.io",
+      "dateRegistered": "2021-12-11T17:00:00Z",
+      "status": "Blocklisted",
+      "lastActive": "2023-12-24T19:44:12Z"
+    },
+    {
+      "id": 10,
+      "name": "Jasper Uy",
+      "username": "jasperuy",
+      "verificationStatus": "Pending",
+      "balance": 1205.37,
+      "email": "jasper.uy@fluxbets.com",
+      "mobile": "+639377654321",
+      "domain": "https://fluxbets.com",
+      "dateRegistered": "2022-06-15T06:00:00Z",
+      "status": "Disabled",
+      "lastActive": "2024-04-20T03:14:45Z"
+    },
+    {
+      "id": 11,
+      "name": "Kyla Villanueva",
+      "username": "kyla_v",
+      "verificationStatus": "Verified",
+      "balance": 8450.75,
+      "email": "kyla.villanueva@bossarena.gg",
+      "mobile": "+639198880001",
+      "domain": "https://bossarena.gg",
+      "dateRegistered": "2023-08-31T14:25:00Z",
+      "status": "Active",
+      "lastActive": "2024-09-16T10:55:00Z"
+    },
+    {
+      "id": 12,
+      "name": "Luna Yang",
+      "username": "lunayang",
+      "verificationStatus": "Unverified",
+      "balance": 90.54,
+      "email": "luna.yang@vegasfrontier.io",
+      "mobile": "+639181112233",
+      "domain": "https://vegasfrontier.io",
+      "dateRegistered": "2024-04-01T09:30:00Z",
+      "status": "Active",
+      "lastActive": "2024-05-12T08:44:00Z"
+    }
+  ]
+}
