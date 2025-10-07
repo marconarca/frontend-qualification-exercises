@@ -14,6 +14,7 @@ const buttonVariants = cva(
         ghost: 'bg-transparent hover:bg-neutral/10',
         subtle:
           'border border-neutral/30 bg-background-secondary/60 text-neutral hover:bg-background-secondary/80',
+        transparent: 'bg-transparent text-foreground hover:bg-neutral/10',
       },
       size: {
         default: 'h-10 px-4 py-2',

@@ -16,3 +16,40 @@
     @apply font-bold text-foreground;
   }
 }
+
+.day-cell > button {
+  display: block;
+  margin-inline: auto;
+}
+
+.rdp-month_caption {
+  margin-bottom: 20px;
+}
+
+.rdp-button_next > svg {
+  fill: white;
+}
+
+.rdp-button_previous > svg {
+  fill: white;
+}
+
+.rdp-outside > button {
+  color: #525252;
+}
+
+.day-cell[data-selected='true'] > button {
+  color: white;
+}
+
+.rdp-root > div > nav {
+  order: 2;
+}
+
+.rdp-root > div > .rdp-month:nth-child(2) {
+  order: 1;
+}
+
+.rdp-root > div > .rdp-month:nth-child(3) {
+  order: 3;
+}

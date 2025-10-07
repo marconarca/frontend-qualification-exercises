@@ -18,10 +18,12 @@ import {
 } from '@/components/ui/popover';
 import type { MembersFilter } from '@/lib/types/filters';
 import type { AccountStatus } from '@/lib/types/member';
+import { formatReversedDateTime } from '@/lib/utils/format';
+import { DateRangePicker } from './date_range_picker/DateRangePicker';
 import { cn } from '@/lib/utils/cn';
 import type { FilterOptions } from '@/lib/utils/filter_cache';
 import { ChevronDown, RotateCcw } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 
 type FiltersPanelProps = {
   filters: MembersFilter;
@@ -52,6 +54,12 @@ const FilterChip = ({
   disabled,
 }: FilterChipProps) => {
   const [open, setOpen] = useState(false);
+  const content =
+    typeof children === 'object' && children && 'props' in (children as any)
+      ? React.cloneElement(children as React.ReactElement<any>, {
+          onClose: () => setOpen(false),
+        })
+      : children;
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild disabled={disabled}>
@@ -67,7 +75,7 @@ const FilterChip = ({
         </button>
       </PopoverTrigger>
       <PopoverContent className="w-72 border border-border bg-background/90 p-4 shadow-lg">
-        {children}
+        {content}
       </PopoverContent>
     </Popover>
   );
@@ -77,13 +85,18 @@ const hasRange = (from?: string, to?: string) => Boolean(from || to);
 
 const formatRangeLabel = (from?: string, to?: string) => {
   if (!from && !to) return undefined;
-  if (from && to) {
-    return `${from} - ${to}`;
+  const formattedFrom = from ? formatReversedDateTime(from) : undefined;
+  const formattedTo = to ? formatReversedDateTime(to) : undefined;
+
+  if (formattedFrom && formattedTo) {
+    return `${formattedFrom} - ${formattedTo}`;
   }
-  if (from) {
-    return `From ${from}`;
+
+  if (formattedFrom) {
+    return `From ${formattedFrom}`;
   }
-  return `Until ${to}`;
+
+  return `Until ${formattedTo}`;
 };
 
 export const FiltersPanel = ({
@@ -422,32 +435,22 @@ export const FiltersPanel = ({
           }
           isActive={hasRange(filters.lastActiveFrom, filters.lastActiveTo)}
         >
-          <div className="space-y-3">
-            <label className="text-xs font-medium uppercase text-muted">
-              From
-            </label>
-            <Input
-              type="date"
-              value={filters.lastActiveFrom ?? ''}
-              onChange={(event) =>
-                onFiltersChange({
-                  lastActiveFrom: event.target.value || undefined,
-                })
-              }
-            />
-            <label className="text-xs font-medium uppercase text-muted">
-              To
-            </label>
-            <Input
-              type="date"
-              value={filters.lastActiveTo ?? ''}
-              onChange={(event) =>
-                onFiltersChange({
-                  lastActiveTo: event.target.value || undefined,
-                })
-              }
-            />
-          </div>
+          <DateRangePicker
+            from={filters.lastActiveFrom}
+            to={filters.lastActiveTo}
+            onApply={({ from: fromDate, to: toDate }) =>
+              onFiltersChange({
+                lastActiveFrom: fromDate,
+                lastActiveTo: toDate,
+              })
+            }
+            onClear={() =>
+              onFiltersChange({
+                lastActiveFrom: undefined,
+                lastActiveTo: undefined,
+              })
+            }
+          />
         </FilterChip>
       </div>
     </section>
