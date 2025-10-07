@@ -62,25 +62,45 @@ export const GET = async (request: NextRequest) => {
   const domains = toArray(searchParams, 'domains');
   const usernames = toArray(searchParams, 'usernames');
 
-  const status = safeStatus(searchParams.get('status'));
-  const verificationStatus = safeVerificationStatus(
-    searchParams.get('verificationStatus'),
-  );
+  const statuses = toArray(searchParams, 'statuses').reduce<AccountStatus[]>(
+    (acc, current) => {
+      const normalized = safeStatus(current);
+      if (normalized) {
+        acc.push(normalized);
+      }
+      return acc;
+    },
+  []);
+  const verificationStatuses = toArray(
+    searchParams,
+    'verificationStatuses',
+  ).reduce<VerificationStatus[]>((acc, current) => {
+    const normalized = safeVerificationStatus(current);
+    if (normalized) {
+      acc.push(normalized);
+    }
+    return acc;
+  }, []);
 
   const registeredFrom = searchParams.get('registeredFrom') ?? undefined;
   const registeredTo = searchParams.get('registeredTo') ?? undefined;
   const lastActiveFrom = searchParams.get('lastActiveFrom') ?? undefined;
   const lastActiveTo = searchParams.get('lastActiveTo') ?? undefined;
 
-  let members = names.length
-    ? uniqueMembers(
-        (
-          await Promise.all(
-            names.map((entry) => searchMembersByName(token, entry)),
-          )
-        ).flat(),
-      )
-    : undefined;
+  const allMembers = await fetchMembers(token);
+  let members = allMembers;
+
+  if (names.length > 0) {
+    const nameMatches = uniqueMembers(
+      (
+        await Promise.all(
+          names.map((entry) => searchMembersByName(token, entry)),
+        )
+      ).flat(),
+    );
+
+    members = intersectMembers(members, nameMatches);
+  }
 
   if (emails.length > 0) {
     const emailMatches = uniqueMembers(
@@ -106,11 +126,7 @@ export const GET = async (request: NextRequest) => {
     members = intersectMembers(members, mobileMatches);
   }
 
-  if (!members) {
-    members = await fetchMembers(token);
-  }
-
-  const filterOptions = buildFilterOptions(members);
+  const filterOptions = buildFilterOptions(allMembers);
 
   const filters: MembersFilter = {
     names,
@@ -118,8 +134,8 @@ export const GET = async (request: NextRequest) => {
     mobiles,
     domains,
     usernames,
-    status,
-    verificationStatus,
+    statuses,
+    verificationStatuses,
     registeredFrom,
     registeredTo,
     lastActiveFrom,

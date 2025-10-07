@@ -17,6 +17,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import type { MembersFilter } from '@/lib/types/filters';
+import type { AccountStatus } from '@/lib/types/member';
 import { cn } from '@/lib/utils/cn';
 import type { FilterOptions } from '@/lib/utils/filter_cache';
 import { ChevronDown, RotateCcw } from 'lucide-react';
@@ -31,7 +32,9 @@ type FiltersPanelProps = {
 };
 
 const chipBaseStyles =
-  'flex h-10 items-center gap-2 rounded-md border border-neutral/30 bg-background-secondary/80 px-3 text-sm text-neutral transition hover:border-secondary hover:text-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring';
+  'flex h-10 items-center gap-2 rounded-md border border-neutral/30 bg-background px-3 text-sm text-neutral transition hover:border-secondary hover:text-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring';
+
+const statusOptions: AccountStatus[] = ['Active', 'Disabled', 'Blocklisted'];
 
 type FilterChipProps = {
   label: string;
@@ -92,8 +95,8 @@ export const FiltersPanel = ({
 }: FiltersPanelProps) => {
   const hasFilters = useMemo(() => {
     const {
-      status,
-      verificationStatus,
+      statuses,
+      verificationStatuses,
       registeredFrom,
       registeredTo,
       lastActiveFrom,
@@ -107,8 +110,8 @@ export const FiltersPanel = ({
 
     return (
       collectionsHaveValues ||
-      Boolean(status) ||
-      Boolean(verificationStatus) ||
+      statuses.length > 0 ||
+      verificationStatuses.length > 0 ||
       hasRange(registeredFrom, registeredTo) ||
       hasRange(lastActiveFrom, lastActiveTo)
     );
@@ -172,36 +175,37 @@ export const FiltersPanel = ({
         <FilterChip
           label="Verification Status"
           displayValue={
-            filters.verificationStatus
-              ? `Verification: ${filters.verificationStatus}`
+            filters.verificationStatuses.length
+              ? `Verification (${filters.verificationStatuses.length})`
               : 'Verification Status'
           }
-          isActive={Boolean(filters.verificationStatus)}
+          isActive={filters.verificationStatuses.length > 0}
         >
           <Command>
             <CommandInput placeholder="Search verification status" />
             <CommandEmpty>No status found.</CommandEmpty>
             <CommandList>
               <CommandGroup>
-                {['Verified', 'Pending', 'Unverified'].map((option) => (
-                  <CommandItem
-                    key={option}
-                    onSelect={() =>
-                      onFiltersChange({
-                        verificationStatus:
-                          filters.verificationStatus === option
-                            ? undefined
-                            : (option as MembersFilter['verificationStatus']),
-                      })
-                    }
-                    className={cn('flex justify-between', {
-                      'text-secondary': filters.verificationStatus === option,
-                    })}
-                  >
-                    {option}
-                    {filters.verificationStatus === option && '●'}
-                  </CommandItem>
-                ))}
+                {['Verified', 'Pending', 'Unverified'].map((option) => {
+                  const isActive = filters.verificationStatuses.includes(option);
+                  return (
+                    <CommandItem
+                      key={option}
+                      onSelect={() =>
+                        onFiltersChange({
+                          verificationStatuses: isActive
+                            ? filters.verificationStatuses.filter(
+                                (statusOption) => statusOption !== option,
+                              )
+                            : [...filters.verificationStatuses, option],
+                        })
+                      }
+                    >
+                      <Checkbox checked={isActive} className="mr-2" />
+                      <span>{option}</span>
+                    </CommandItem>
+                  );
+                })}
               </CommandGroup>
             </CommandList>
           </Command>
@@ -372,33 +376,36 @@ export const FiltersPanel = ({
 
         <FilterChip
           label="Status"
-          displayValue={filters.status ? `Status: ${filters.status}` : 'Status'}
-          isActive={Boolean(filters.status)}
+          displayValue={
+            filters.statuses.length
+              ? `Status (${filters.statuses.length})`
+              : 'Status'
+          }
+          isActive={filters.statuses.length > 0}
         >
           <Command>
             <CommandInput placeholder="Search status" />
             <CommandEmpty>No status found.</CommandEmpty>
             <CommandList>
               <CommandGroup>
-                {['Active', 'Disabled', 'Blocklisted'].map((option) => (
-                  <CommandItem
-                    key={option}
-                    onSelect={() =>
-                      onFiltersChange({
-                        status:
-                          filters.status === option
-                            ? undefined
-                            : (option as MembersFilter['status']),
-                      })
-                    }
-                    className={cn('flex justify-between', {
-                      'text-secondary': filters.status === option,
-                    })}
-                  >
-                    {option}
-                    {filters.status === option && '●'}
-                  </CommandItem>
-                ))}
+                {statusOptions.map((option) => {
+                  const isActive = filters.statuses.includes(option);
+                  return (
+                    <CommandItem
+                      key={option}
+                      onSelect={() =>
+                        onFiltersChange({
+                          statuses: isActive
+                            ? filters.statuses.filter((status) => status !== option)
+                            : [...filters.statuses, option],
+                        })
+                      }
+                    >
+                      <Checkbox checked={isActive} className="mr-2" />
+                      <span>{option}</span>
+                    </CommandItem>
+                  );
+                })}
               </CommandGroup>
             </CommandList>
           </Command>

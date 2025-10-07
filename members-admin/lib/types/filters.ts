@@ -6,8 +6,8 @@ export type MembersFilter = {
   mobiles: string[];
   domains: string[];
   usernames: string[];
-  status?: AccountStatus;
-  verificationStatus?: VerificationStatus;
+  statuses: AccountStatus[];
+  verificationStatuses: VerificationStatus[];
   registeredFrom?: string;
   registeredTo?: string;
   lastActiveFrom?: string;

@@ -15,8 +15,8 @@ const createDefaultFilters = (): MembersFilter => ({
   mobiles: [],
   domains: [],
   usernames: [],
-  status: undefined,
-  verificationStatus: undefined,
+  statuses: [],
+  verificationStatuses: [],
   registeredFrom: undefined,
   registeredTo: undefined,
   lastActiveFrom: undefined,
@@ -60,13 +60,11 @@ export const useMembersData = () => {
       params.append('usernames', username),
     );
 
-    if (filters.status) {
-      params.set('status', filters.status);
-    }
+    filters.statuses.forEach((status) => params.append('statuses', status));
 
-    if (filters.verificationStatus) {
-      params.set('verificationStatus', filters.verificationStatus);
-    }
+    filters.verificationStatuses.forEach((entry) =>
+      params.append('verificationStatuses', entry),
+    );
 
     if (filters.registeredFrom) {
       params.set('registeredFrom', filters.registeredFrom);

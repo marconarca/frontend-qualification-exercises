@@ -33,8 +33,8 @@ const applyFilterLogic = (member: Member, filters: MembersFilter) => {
     emails,
     mobiles,
     usernames,
-    status,
-    verificationStatus,
+    statuses,
+    verificationStatuses,
     registeredFrom,
     registeredTo,
     lastActiveFrom,
@@ -61,13 +61,13 @@ const applyFilterLogic = (member: Member, filters: MembersFilter) => {
     return false;
   }
 
-  if (status && member.status !== status) {
+  if (statuses.length > 0 && !statuses.includes(member.status)) {
     return false;
   }
 
   if (
-    verificationStatus &&
-    member.verificationStatus !== verificationStatus
+    verificationStatuses.length > 0 &&
+    !verificationStatuses.includes(member.verificationStatus)
   ) {
     return false;
   }
