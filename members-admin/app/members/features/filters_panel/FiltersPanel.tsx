@@ -10,7 +10,6 @@ import {
   CommandItem,
   CommandList,
 } from '@/components/ui/command';
-import { Input } from '@/components/ui/input';
 import {
   Popover,
   PopoverContent,
@@ -18,12 +17,12 @@ import {
 } from '@/components/ui/popover';
 import type { MembersFilter } from '@/lib/types/filters';
 import type { AccountStatus } from '@/lib/types/member';
-import { formatReversedDateTime } from '@/lib/utils/format';
-import { DateRangePicker } from './date_range_picker/DateRangePicker';
 import { cn } from '@/lib/utils/cn';
 import type { FilterOptions } from '@/lib/utils/filter_cache';
+import { formatReversedDateTime } from '@/lib/utils/format';
 import { ChevronDown, RotateCcw } from 'lucide-react';
 import React, { useMemo, useState } from 'react';
+import { DateRangePicker } from './date_range_picker/DateRangePicker';
 
 type FiltersPanelProps = {
   filters: MembersFilter;
@@ -360,32 +359,22 @@ export const FiltersPanel = ({
           }
           isActive={hasRange(filters.registeredFrom, filters.registeredTo)}
         >
-          <div className="space-y-3">
-            <label className="text-xs font-medium uppercase text-muted">
-              From
-            </label>
-            <Input
-              type="date"
-              value={filters.registeredFrom ?? ''}
-              onChange={(event) =>
-                onFiltersChange({
-                  registeredFrom: event.target.value || undefined,
-                })
-              }
-            />
-            <label className="text-xs font-medium uppercase text-muted">
-              To
-            </label>
-            <Input
-              type="date"
-              value={filters.registeredTo ?? ''}
-              onChange={(event) =>
-                onFiltersChange({
-                  registeredTo: event.target.value || undefined,
-                })
-              }
-            />
-          </div>
+          <DateRangePicker
+            from={filters.registeredFrom}
+            to={filters.registeredTo}
+            onApply={({ from: fromDate, to: toDate }) =>
+              onFiltersChange({
+                registeredFrom: fromDate,
+                registeredTo: toDate,
+              })
+            }
+            onClear={() =>
+              onFiltersChange({
+                registeredFrom: undefined,
+                registeredTo: undefined,
+              })
+            }
+          />
         </FilterChip>
 
         <FilterChip
