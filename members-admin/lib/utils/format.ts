@@ -17,9 +17,21 @@ const reversedDateFormatter = new Intl.DateTimeFormat('en-GB', {
   year: 'numeric',
 });
 
-export const formatReversedDate = (value: string) => {
+const isValidDate = (value?: string | null) => {
+  if (!value) {
+    return false;
+  }
+  const date = new Date(value);
+  return !Number.isNaN(date.getTime());
+};
+
+export const formatReversedDate = (value?: string | null) => {
+  if (!isValidDate(value)) {
+    return '—';
+  }
+
   const [day, month, year] = reversedDateFormatter
-    .formatToParts(new Date(value))
+    .formatToParts(new Date(value as string))
     .filter((part) => part.type !== 'literal')
     .map((part) => part.value);
 
@@ -46,15 +58,27 @@ const reversedDateTimeFormatter = new Intl.DateTimeFormat('en-US', {
 export const formatCurrency = (value: number) =>
   currencyFormatter.format(value);
 
-export const formatDate = (value: string) =>
-  dateFormatter.format(new Date(value));
+export const formatDate = (value?: string | null) => {
+  if (!isValidDate(value)) {
+    return '—';
+  }
+  return dateFormatter.format(new Date(value as string));
+};
 
-export const formatDateTime = (value: string) =>
-  dateTimeFormatter.format(new Date(value));
+export const formatDateTime = (value?: string | null) => {
+  if (!isValidDate(value)) {
+    return '—';
+  }
+  return dateTimeFormatter.format(new Date(value as string));
+};
 
-export const formatReversedDateTime = (value: string) => {
+export const formatReversedDateTime = (value?: string | null) => {
+  if (!isValidDate(value)) {
+    return '—';
+  }
+
   const parts = reversedDateTimeFormatter
-    .formatToParts(new Date(value))
+    .formatToParts(new Date(value as string))
     .filter((part) => part.type !== 'literal');
 
   const getValue = (type: Intl.DateTimeFormatPartTypes) =>
@@ -67,10 +91,15 @@ export const formatReversedDateTime = (value: string) => {
   const minute = getValue('minute');
   const dayPeriod = getValue('dayPeriod');
 
-  return `${year}  ${month} ${day} ${hour}:${minute} ${dayPeriod}`.trim();
+  const formatted = `${year}  ${month} ${day} ${hour}:${minute} ${dayPeriod}`.trim();
+  return formatted || '—';
 };
 
-export const formatPhone = (value: string) => {
+export const formatPhone = (value?: string | null) => {
+  if (!value) {
+    return '—';
+  }
+
   const normalized = value.replace(/\s+/g, '');
   if (!normalized.startsWith('+') || normalized.length <= 3) {
     return value;

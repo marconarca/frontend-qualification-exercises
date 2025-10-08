@@ -44,16 +44,25 @@ const applyFilterLogic = (member: Member, filters: MembersFilter) => {
     return false;
   }
 
-  if (domains.length > 0 && !domains.includes(member.domain)) {
-    return false;
+  if (domains.length > 0) {
+    const domain = member.domain ?? '';
+    if (!domain || !domains.includes(domain)) {
+      return false;
+    }
   }
 
-  if (emails.length > 0 && !emails.includes(member.emailAddress)) {
-    return false;
+  if (emails.length > 0) {
+    const email = member.emailAddress ?? '';
+    if (!email || !emails.includes(email)) {
+      return false;
+    }
   }
 
-  if (mobiles.length > 0 && !mobiles.includes(member.mobileNumber)) {
-    return false;
+  if (mobiles.length > 0) {
+    const mobile = member.mobileNumber ?? '';
+    if (!mobile || !mobiles.includes(mobile)) {
+      return false;
+    }
   }
 
   if (statuses.length > 0 && !statuses.includes(member.status)) {

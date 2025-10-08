@@ -12,6 +12,7 @@ import {
   getAccountBadgeVariant,
   getVerificationBadgeVariant,
 } from '@/lib/utils/format';
+import type { ReactNode } from 'react';
 import { AlertCircle, Ban, CheckCircle2 } from 'lucide-react';
 
 type MembersTableProps = {
@@ -37,7 +38,7 @@ const verificationDotColors: Record<Member['verificationStatus'], string> = {
   UNVERIFIED: 'bg-error',
 };
 
-const statusIconMap: Record<Member['status'], React.ReactNode> = {
+const statusIconMap: Record<Member['status'], ReactNode> = {
   ACTIVE: <CheckCircle2 className="h-3.5 w-3.5" />,
   BLACKLISTED: <AlertCircle className="h-3.5 w-3.5" />,
   DISABLED: <Ban className="h-3.5 w-3.5" />,
@@ -47,6 +48,18 @@ const statusBackgroundMap: Record<Member['status'], string> = {
   ACTIVE: 'bg-[#053321] border-transparent',
   BLACKLISTED: 'bg-[#55160C] border-transparent',
   DISABLED: 'bg-[#161B26] border-transparent text-neutral',
+};
+
+const getDomainHref = (domain?: string | null) => {
+  if (!domain) {
+    return null;
+  }
+
+  if (domain.startsWith('http://') || domain.startsWith('https://')) {
+    return domain;
+  }
+
+  return `https://${domain}`;
 };
 
 export const MembersTable = ({
@@ -115,25 +128,33 @@ export const MembersTable = ({
                 </Badge>
               </td>
               <td className="px-4 py-3">
-                <a
-                  className="text-muted underline-offset-4 hover:underline text-[12px]"
-                  href={`mailto:${member.emailAddress}`}
-                >
-                  {member.emailAddress}
-                </a>
+                {member.emailAddress ? (
+                  <a
+                    className="text-muted underline-offset-4 hover:underline text-[12px]"
+                    href={`mailto:${member.emailAddress}`}
+                  >
+                    {member.emailAddress}
+                  </a>
+                ) : (
+                  <span className="text-[12px] text-muted">—</span>
+                )}
               </td>
               <td className="px-4 py-3 text-muted text-[12px]">
                 {formatPhone(member.mobileNumber)}
               </td>
               <td className="px-4 py-3">
-                <a
-                  className="text-muted underline-offset-4 hover:underline text-[12px]"
-                  href={member.domain}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  {member.domain}
-                </a>
+                {member.domain ? (
+                  <a
+                    className="text-muted underline-offset-4 hover:underline text-[12px]"
+                    href={getDomainHref(member.domain)}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {member.domain}
+                  </a>
+                ) : (
+                  <span className="text-[12px] text-muted">—</span>
+                )}
               </td>
               <td className="px-4 py-3 text-muted text-[12px]">
                 {formatReversedDate(member.dateTimeCreated)}

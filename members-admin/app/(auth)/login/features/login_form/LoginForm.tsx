@@ -2,8 +2,6 @@
 
 import { useState, useTransition } from 'react';
 import { authenticateAdmin } from '../../utils/authenticate_admin';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 
 export const LoginForm = () => {
@@ -19,30 +17,9 @@ export const LoginForm = () => {
 
   return (
     <form className="space-y-5" action={handleSubmit}>
-      <div className="space-y-2">
-        <Label htmlFor="username">Username</Label>
-        <Input
-          id="username"
-          name="username"
-          autoComplete="username"
-          placeholder="admin"
-          required
-        />
-      </div>
-
-      <div className="space-y-2">
-        <div className="flex items-center justify-between">
-          <Label htmlFor="password">Password</Label>
-        </div>
-        <Input
-          id="password"
-          name="password"
-          type="password"
-          autoComplete="current-password"
-          placeholder="••••••••"
-          required
-        />
-      </div>
+      <p className="text-sm text-muted">
+        Request a session to access the members dashboard.
+      </p>
 
       {error && (
         <p className="text-sm text-error" role="alert">
@@ -51,7 +28,7 @@ export const LoginForm = () => {
       )}
 
       <Button className="w-full" type="submit" disabled={pending}>
-        {pending ? 'Signing in...' : 'Sign In'}
+        {pending ? 'Requesting Access…' : 'Sign In'}
       </Button>
     </form>
   );

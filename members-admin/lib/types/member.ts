@@ -3,12 +3,12 @@ export type VerificationStatus = 'VERIFIED' | 'PENDING' | 'UNVERIFIED';
 export type AccountStatus = 'ACTIVE' | 'DISABLED' | 'BLACKLISTED';
 
 export type Member = {
-  id: number;
+  id: string;
   name: string;
   verificationStatus: VerificationStatus;
-  emailAddress: string;
-  mobileNumber: string;
-  domain: string;
+  emailAddress: string | null;
+  mobileNumber: string | null;
+  domain: string | null;
   dateTimeCreated: string;
   status: AccountStatus;
   dateTimeLastActive: string;

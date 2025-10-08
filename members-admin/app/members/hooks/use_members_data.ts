@@ -148,7 +148,36 @@ export const useMembersData = () => {
   }, [fetchMembersData]);
 
   const updateFilters = (partial: Partial<MembersFilter>) => {
-    setFilters((state) => ({ ...state, ...partial }));
+    setFilters((state) => {
+      const next: MembersFilter = { ...state, ...partial };
+
+      const hasNames = next.names.length > 0;
+      const hasEmails = next.emails.length > 0;
+      const hasMobiles = next.mobiles.length > 0;
+
+      if (hasNames) {
+        next.emails = [];
+        next.mobiles = [];
+      } else if (hasEmails) {
+        next.names = [];
+        next.mobiles = [];
+      } else if (hasMobiles) {
+        next.names = [];
+        next.emails = [];
+      }
+
+      if (hasNames || hasEmails || hasMobiles) {
+        next.domains = [];
+        next.statuses = [];
+        next.verificationStatuses = [];
+        next.registeredFrom = undefined;
+        next.registeredTo = undefined;
+        next.lastActiveFrom = undefined;
+        next.lastActiveTo = undefined;
+      }
+
+      return next;
+    });
     setPagination((state) => ({ ...state, page: 1 }));
   };
 

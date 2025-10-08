@@ -16,10 +16,21 @@ export const buildFilterOptions = cache(
     const mobiles = new Set<string>();
 
     members.forEach((member) => {
-      names.add(member.name);
-      domains.add(member.domain);
-      emails.add(member.emailAddress);
-      mobiles.add(member.mobileNumber);
+      if (member.name) {
+        names.add(member.name);
+      }
+
+      if (member.domain) {
+        domains.add(member.domain);
+      }
+
+      if (member.emailAddress) {
+        emails.add(member.emailAddress);
+      }
+
+      if (member.mobileNumber) {
+        mobiles.add(member.mobileNumber);
+      }
     });
 
     const sortAsc = (values: Set<string>) =>

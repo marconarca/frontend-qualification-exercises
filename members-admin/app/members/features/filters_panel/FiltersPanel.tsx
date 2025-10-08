@@ -18,12 +18,12 @@ import {
 import type { MembersFilter } from '@/lib/types/filters';
 import type { AccountStatus, VerificationStatus } from '@/lib/types/member';
 import { cn } from '@/lib/utils/cn';
+import type { FilterOptions } from '@/lib/utils/filter_cache';
 import {
   formatAccountStatusLabel,
+  formatReversedDateTime,
   formatVerificationStatusLabel,
 } from '@/lib/utils/format';
-import type { FilterOptions } from '@/lib/utils/filter_cache';
-import { formatReversedDateTime } from '@/lib/utils/format';
 import { ChevronDown, RotateCcw } from 'lucide-react';
 import React, { useMemo, useState } from 'react';
 import { DateRangePicker } from './date_range_picker/DateRangePicker';
@@ -114,6 +114,11 @@ export const FiltersPanel = ({
   onFiltersChange,
   onReset,
 }: FiltersPanelProps) => {
+  const primaryFiltersActive =
+    filters.names.length > 0 ||
+    filters.emails.length > 0 ||
+    filters.mobiles.length > 0;
+
   const hasFilters = useMemo(() => {
     const {
       statuses,
@@ -201,6 +206,7 @@ export const FiltersPanel = ({
               : 'Verification Status'
           }
           isActive={filters.verificationStatuses.length > 0}
+          disabled={primaryFiltersActive}
         >
           <Command>
             <CommandInput placeholder="Search verification status" />
@@ -217,7 +223,7 @@ export const FiltersPanel = ({
                         onFiltersChange({
                           verificationStatuses: isActive
                             ? filters.verificationStatuses.filter(
-                                (statusOption) => statusOption !== option,
+                                (statusOption) => statusOption !== option
                               )
                             : [...filters.verificationStatuses, option],
                         })
@@ -329,6 +335,7 @@ export const FiltersPanel = ({
               : 'Domain'
           }
           isActive={filters.domains.length > 0}
+          disabled={primaryFiltersActive}
         >
           <Command>
             <CommandInput placeholder="Search domain" />
@@ -367,6 +374,7 @@ export const FiltersPanel = ({
             'Date Registered'
           }
           isActive={hasRange(filters.registeredFrom, filters.registeredTo)}
+          disabled={primaryFiltersActive}
         >
           <DateRangePicker
             from={filters.registeredFrom}
@@ -394,6 +402,7 @@ export const FiltersPanel = ({
               : 'Status'
           }
           isActive={filters.statuses.length > 0}
+          disabled={primaryFiltersActive}
         >
           <Command>
             <CommandInput placeholder="Search status" />
@@ -432,6 +441,7 @@ export const FiltersPanel = ({
             'Date and Time Last Active'
           }
           isActive={hasRange(filters.lastActiveFrom, filters.lastActiveTo)}
+          disabled={primaryFiltersActive}
         >
           <DateRangePicker
             from={filters.lastActiveFrom}

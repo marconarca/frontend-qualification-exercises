@@ -1,18 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
-import {
-  fetchMembers,
-  searchMembersByEmail,
-  searchMembersByMobile,
-  searchMembersByName,
-} from '@/lib/services/members_service';
+import { fetchMembers } from '@/lib/services/members_service';
+import type { GraphqlFilter } from '@/lib/services/members_service';
 import { ADMIN_TOKEN_COOKIE } from '@/lib/config/auth';
 import type {
   MembersFilter,
   PaginationState,
 } from '@/lib/types/filters';
 import type { AccountStatus, VerificationStatus } from '@/lib/types/member';
-import { uniqueMembers, intersectMembers } from '@/app/members/utils/collection';
 import {
   filterMembers,
   paginateMembers,
@@ -86,43 +81,50 @@ export const GET = async (request: NextRequest) => {
   const lastActiveFrom = searchParams.get('lastActiveFrom') ?? undefined;
   const lastActiveTo = searchParams.get('lastActiveTo') ?? undefined;
 
-  const allMembers = await fetchMembers(token);
-  let members = allMembers;
+  const graphqlFilter: GraphqlFilter = {};
 
-  if (names.length > 0) {
-    const nameMatches = uniqueMembers(
-      (
-        await Promise.all(
-          names.map((entry) => searchMembersByName(token, entry)),
-        )
-      ).flat(),
-    );
-
-    members = intersectMembers(members, nameMatches);
+  if (statuses.length > 0) {
+    graphqlFilter.status = { in: statuses };
   }
 
-  if (emails.length > 0) {
-    const emailMatches = uniqueMembers(
-      (
-        await Promise.all(
-          emails.map((entry) => searchMembersByEmail(token, entry)),
-        )
-      ).flat(),
-    );
-
-    members = intersectMembers(members, emailMatches);
+  if (verificationStatuses.length > 0) {
+    graphqlFilter.verificationStatus = { in: verificationStatuses };
   }
 
-  if (mobiles.length > 0) {
-    const mobileMatches = uniqueMembers(
-      (
-        await Promise.all(
-          mobiles.map((entry) => searchMembersByMobile(token, entry)),
-        )
-      ).flat(),
-    );
+  const normalizedDomains = domains.filter(Boolean);
+  if (normalizedDomains.length > 0) {
+    graphqlFilter.domain = { in: normalizedDomains };
+  }
 
-    members = intersectMembers(members, mobileMatches);
+  if (registeredFrom || registeredTo) {
+    graphqlFilter.dateTimeCreated = {
+      ...(registeredFrom ? { greaterThanOrEqual: registeredFrom } : {}),
+      ...(registeredTo ? { lesserThanOrEqual: registeredTo } : {}),
+    };
+  }
+
+  if (lastActiveFrom || lastActiveTo) {
+    graphqlFilter.dateTimeLastActive = {
+      ...(lastActiveFrom ? { greaterThanOrEqual: lastActiveFrom } : {}),
+      ...(lastActiveTo ? { lesserThanOrEqual: lastActiveTo } : {}),
+    };
+  }
+
+  let allMembers;
+  try {
+    allMembers = await fetchMembers(
+      token,
+      Object.keys(graphqlFilter).length > 0 ? graphqlFilter : undefined,
+    );
+  } catch (error) {
+    console.error(error);
+    const message = (error as Error).message ?? 'Failed to load members';
+    const status = message === 'UNAUTHORIZED' ? 401 : 500;
+    const response =
+      status === 401
+        ? { message: 'Unauthorized' }
+        : { message: 'Failed to load members' };
+    return NextResponse.json(response, { status });
   }
 
   const filterOptions = buildFilterOptions(allMembers);
@@ -145,7 +147,7 @@ export const GET = async (request: NextRequest) => {
     pageSize,
   };
 
-  const filtered = filterMembers(members, filters);
+  const filtered = filterMembers(allMembers, filters);
   const data = paginateMembers(filtered, pagination);
 
   return NextResponse.json({

@@ -1,32 +1,32 @@
-import { getApiBaseUrl } from '@/lib/config/env';
+import {
+  getAuthBasicToken,
+  getAuthPlatformCode,
+  getAuthRole,
+  getAuthSessionEndpoint,
+} from '@/lib/config/env';
 
-export type LoginPayload = {
-  username: string;
-  password: string;
-};
-
-export type LoginResponse = {
-  token: string;
-  admin: {
-    username: string;
-    name: string;
+export type CreateSessionResponse = {
+  session: {
+    id: string;
+    dateTimeCreated: string;
   };
+  accessToken: string;
+  refreshToken: string;
 };
 
-export const authenticate = async (
-  credentials: LoginPayload,
-): Promise<LoginResponse> => {
-  const response = await fetch(`${getApiBaseUrl()}/login`, {
+export const createSession = async (): Promise<CreateSessionResponse> => {
+  const response = await fetch(getAuthSessionEndpoint(), {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json',
+      authorization: getAuthBasicToken(),
+      'platform-code': getAuthPlatformCode(),
+      role: getAuthRole(),
     },
-    body: JSON.stringify(credentials),
   });
 
   if (!response.ok) {
-    throw new Error('Invalid credentials');
+    throw new Error('Failed to create session');
   }
 
-  return response.json() as Promise<LoginResponse>;
+  return response.json() as Promise<CreateSessionResponse>;
 };
