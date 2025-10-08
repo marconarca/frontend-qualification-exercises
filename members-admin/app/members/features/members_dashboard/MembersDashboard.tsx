@@ -1,7 +1,8 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { useMemo } from 'react';
+import { useMemo, useTransition } from 'react';
+import { useRouter } from 'next/navigation';
 import { useMembersData } from '../../hooks/use_members_data';
 import { signOut } from '../../utils/sign_out';
 import { FiltersPanel } from '../filters_panel/FiltersPanel';
@@ -14,6 +15,9 @@ type MembersDashboardProps = {
 };
 
 export const MembersDashboard = ({ adminName }: MembersDashboardProps) => {
+  const router = useRouter();
+  const [isSigningOut, startSignOut] = useTransition();
+
   const {
     members,
     total,
@@ -33,6 +37,17 @@ export const MembersDashboard = ({ adminName }: MembersDashboardProps) => {
     [total, pagination.pageSize]
   );
 
+  const handleSignOut = () => {
+    startSignOut(async () => {
+      try {
+        await signOut();
+      } finally {
+        router.replace('/login');
+        router.refresh();
+      }
+    });
+  };
+
   return (
     <div className="mx-auto flex min-h-screen w-full max-w-screen-xl flex-col px-6 py-10">
       <header className="flex flex-col gap-4 rounded-lg border border-border bg-background/80 p-6 shadow-lg backdrop-blur md:flex-row md:items-center md:justify-between">
@@ -42,11 +57,14 @@ export const MembersDashboard = ({ adminName }: MembersDashboardProps) => {
             View your members here. {adminName}
           </p>
         </div>
-        <form action={signOut}>
-          <Button variant="outline" type="submit">
-            Sign out
-          </Button>
-        </form>
+        <Button
+          variant="outline"
+          type="button"
+          onClick={handleSignOut}
+          disabled={isSigningOut}
+        >
+          {isSigningOut ? 'Signing out…' : 'Sign out'}
+        </Button>
       </header>
 
       <FiltersPanel
