@@ -60,7 +60,6 @@ export const GET = async (request: NextRequest) => {
   const emails = toArray(searchParams, 'emails');
   const mobiles = toArray(searchParams, 'mobiles');
   const domains = toArray(searchParams, 'domains');
-  const usernames = toArray(searchParams, 'usernames');
 
   const statuses = toArray(searchParams, 'statuses').reduce<AccountStatus[]>(
     (acc, current) => {
@@ -133,7 +132,6 @@ export const GET = async (request: NextRequest) => {
     emails,
     mobiles,
     domains,
-    usernames,
     statuses,
     verificationStatuses,
     registeredFrom,

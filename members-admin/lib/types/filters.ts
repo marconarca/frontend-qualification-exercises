@@ -5,7 +5,6 @@ export type MembersFilter = {
   emails: string[];
   mobiles: string[];
   domains: string[];
-  usernames: string[];
   statuses: AccountStatus[];
   verificationStatuses: VerificationStatus[];
   registeredFrom?: string;

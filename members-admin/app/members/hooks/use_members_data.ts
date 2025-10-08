@@ -14,7 +14,6 @@ const createDefaultFilters = (): MembersFilter => ({
   emails: [],
   mobiles: [],
   domains: [],
-  usernames: [],
   statuses: [],
   verificationStatuses: [],
   registeredFrom: undefined,
@@ -33,7 +32,6 @@ const defaultFilterOptions: FilterOptions = {
   domains: [],
   emails: [],
   mobiles: [],
-  usernames: [],
 };
 
 export const useMembersData = () => {
@@ -56,9 +54,6 @@ export const useMembersData = () => {
     filters.emails.forEach((email) => params.append('emails', email));
     filters.mobiles.forEach((mobile) => params.append('mobiles', mobile));
     filters.domains.forEach((domain) => params.append('domains', domain));
-    filters.usernames.forEach((username) =>
-      params.append('usernames', username),
-    );
 
     filters.statuses.forEach((status) => params.append('statuses', status));
 

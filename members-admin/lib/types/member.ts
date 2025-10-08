@@ -5,7 +5,6 @@ export type AccountStatus = 'Active' | 'Disabled' | 'Blocklisted';
 export type Member = {
   id: number;
   name: string;
-  username: string;
   verificationStatus: VerificationStatus;
   balance: number;
   email: string;

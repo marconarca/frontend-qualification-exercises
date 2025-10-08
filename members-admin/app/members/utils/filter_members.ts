@@ -32,7 +32,6 @@ const applyFilterLogic = (member: Member, filters: MembersFilter) => {
     domains,
     emails,
     mobiles,
-    usernames,
     statuses,
     verificationStatuses,
     registeredFrom,
@@ -54,10 +53,6 @@ const applyFilterLogic = (member: Member, filters: MembersFilter) => {
   }
 
   if (mobiles.length > 0 && !mobiles.includes(member.mobile)) {
-    return false;
-  }
-
-  if (usernames.length > 0 && !usernames.includes(member.username)) {
     return false;
   }
 

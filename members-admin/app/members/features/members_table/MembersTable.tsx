@@ -94,7 +94,6 @@ export const MembersTable = ({
             >
               <td className="px-4 py-3">
                 <div className="font-medium text-[12px]">{member.name}</div>
-                <p className="text-xs text-muted">{member.username}</p>
               </td>
               <td className="px-4 py-3">
                 <Badge
