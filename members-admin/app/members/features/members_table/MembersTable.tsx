@@ -4,9 +4,11 @@ import { Badge } from '@/components/ui/badge';
 import type { Member } from '@/lib/types/member';
 import { cn } from '@/lib/utils/cn';
 import {
+  formatAccountStatusLabel,
   formatPhone,
   formatReversedDate,
   formatReversedDateTime,
+  formatVerificationStatusLabel,
   getAccountBadgeVariant,
   getVerificationBadgeVariant,
 } from '@/lib/utils/format';
@@ -30,21 +32,21 @@ const headers = [
 ];
 
 const verificationDotColors: Record<Member['verificationStatus'], string> = {
-  Verified: 'bg-success',
-  Pending: 'bg-warning',
-  Unverified: 'bg-error',
+  VERIFIED: 'bg-success',
+  PENDING: 'bg-warning',
+  UNVERIFIED: 'bg-error',
 };
 
 const statusIconMap: Record<Member['status'], React.ReactNode> = {
-  Active: <CheckCircle2 className="h-3.5 w-3.5" />,
-  Blocklisted: <AlertCircle className="h-3.5 w-3.5" />,
-  Disabled: <Ban className="h-3.5 w-3.5" />,
+  ACTIVE: <CheckCircle2 className="h-3.5 w-3.5" />,
+  BLACKLISTED: <AlertCircle className="h-3.5 w-3.5" />,
+  DISABLED: <Ban className="h-3.5 w-3.5" />,
 };
 
 const statusBackgroundMap: Record<Member['status'], string> = {
-  Active: 'bg-[#053321] border-transparent',
-  Blocklisted: 'bg-[#55160C] border-transparent',
-  Disabled: 'bg-[#161B26] border-transparent text-neutral',
+  ACTIVE: 'bg-[#053321] border-transparent',
+  BLACKLISTED: 'bg-[#55160C] border-transparent',
+  DISABLED: 'bg-[#161B26] border-transparent text-neutral',
 };
 
 export const MembersTable = ({
@@ -107,7 +109,9 @@ export const MembersTable = ({
                       verificationDotColors[member.verificationStatus]
                     )}
                   />
-                  <span>{member.verificationStatus}</span>
+                  <span>
+                    {formatVerificationStatusLabel(member.verificationStatus)}
+                  </span>
                 </Badge>
               </td>
               <td className="px-4 py-3">
@@ -142,7 +146,7 @@ export const MembersTable = ({
                   <span className="flex h-4 w-4 items-center justify-center">
                     {statusIconMap[member.status]}
                   </span>
-                  <span>{member.status}</span>
+                  <span>{formatAccountStatusLabel(member.status)}</span>
                 </Badge>
               </td>
               <td className="px-4 py-3 text-muted text-[12px]">

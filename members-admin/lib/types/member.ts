@@ -1,6 +1,6 @@
-export type VerificationStatus = 'Verified' | 'Pending' | 'Unverified';
+export type VerificationStatus = 'VERIFIED' | 'PENDING' | 'UNVERIFIED';
 
-export type AccountStatus = 'Active' | 'Disabled' | 'Blocklisted';
+export type AccountStatus = 'ACTIVE' | 'DISABLED' | 'BLACKLISTED';
 
 export type Member = {
   id: number;

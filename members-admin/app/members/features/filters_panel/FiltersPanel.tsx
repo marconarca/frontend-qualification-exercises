@@ -16,8 +16,12 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import type { MembersFilter } from '@/lib/types/filters';
-import type { AccountStatus } from '@/lib/types/member';
+import type { AccountStatus, VerificationStatus } from '@/lib/types/member';
 import { cn } from '@/lib/utils/cn';
+import {
+  formatAccountStatusLabel,
+  formatVerificationStatusLabel,
+} from '@/lib/utils/format';
 import type { FilterOptions } from '@/lib/utils/filter_cache';
 import { formatReversedDateTime } from '@/lib/utils/format';
 import { ChevronDown, RotateCcw } from 'lucide-react';
@@ -35,7 +39,12 @@ type FiltersPanelProps = {
 const chipBaseStyles =
   'flex h-10 items-center gap-2 rounded-md border border-neutral/30 bg-background px-3 text-sm text-neutral transition hover:border-secondary hover:text-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring';
 
-const statusOptions: AccountStatus[] = ['Active', 'Disabled', 'Blocklisted'];
+const statusOptions: AccountStatus[] = ['ACTIVE', 'DISABLED', 'BLACKLISTED'];
+const verificationStatusOptions: VerificationStatus[] = [
+  'VERIFIED',
+  'PENDING',
+  'UNVERIFIED',
+];
 
 type FilterChipProps = {
   label: string;
@@ -198,7 +207,7 @@ export const FiltersPanel = ({
             <CommandEmpty>No status found.</CommandEmpty>
             <CommandList>
               <CommandGroup>
-                {['Verified', 'Pending', 'Unverified'].map((option) => {
+                {verificationStatusOptions.map((option) => {
                   const isActive =
                     filters.verificationStatuses.includes(option);
                   return (
@@ -208,14 +217,14 @@ export const FiltersPanel = ({
                         onFiltersChange({
                           verificationStatuses: isActive
                             ? filters.verificationStatuses.filter(
-                                (statusOption) => statusOption !== option
+                                (statusOption) => statusOption !== option,
                               )
                             : [...filters.verificationStatuses, option],
                         })
                       }
                     >
                       <Checkbox checked={isActive} className="mr-2" />
-                      <span>{option}</span>
+                      <span>{formatVerificationStatusLabel(option)}</span>
                     </CommandItem>
                   );
                 })}
@@ -407,7 +416,7 @@ export const FiltersPanel = ({
                       }
                     >
                       <Checkbox checked={isActive} className="mr-2" />
-                      <span>{option}</span>
+                      <span>{formatAccountStatusLabel(option)}</span>
                     </CommandItem>
                   );
                 })}

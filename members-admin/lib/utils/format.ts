@@ -82,28 +82,34 @@ export const formatPhone = (value: string) => {
   return `${countryCode} ${national}`.trim();
 };
 
+const formatConstantLabel = (value: string) =>
+  value.charAt(0) + value.slice(1).toLowerCase();
+
+const verificationVariantMap: Record<
+  Member['verificationStatus'],
+  'success' | 'warning' | 'error'
+> = {
+  VERIFIED: 'success',
+  PENDING: 'warning',
+  UNVERIFIED: 'error',
+};
+
+const accountVariantMap: Record<Member['status'], 'success' | 'neutral' | 'error'> = {
+  ACTIVE: 'success',
+  DISABLED: 'neutral',
+  BLACKLISTED: 'error',
+};
+
 export const getVerificationBadgeVariant = (
   status: Member['verificationStatus']
-) => {
-  if (status === 'Verified') {
-    return 'success';
-  }
+) => verificationVariantMap[status];
 
-  if (status === 'Pending') {
-    return 'warning';
-  }
+export const getAccountBadgeVariant = (status: Member['status']) =>
+  accountVariantMap[status];
 
-  return 'error';
-};
+export const formatVerificationStatusLabel = (
+  status: Member['verificationStatus']
+) => formatConstantLabel(status);
 
-export const getAccountBadgeVariant = (status: Member['status']) => {
-  if (status === 'Active') {
-    return 'success';
-  }
-
-  if (status === 'Disabled') {
-    return 'neutral';
-  }
-
-  return 'error';
-};
+export const formatAccountStatusLabel = (status: Member['status']) =>
+  formatConstantLabel(status);

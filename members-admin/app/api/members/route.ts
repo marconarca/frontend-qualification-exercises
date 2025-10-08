@@ -30,14 +30,14 @@ const toArray = (params: URLSearchParams, key: string) =>
   params.getAll(key).map((entry) => entry.trim()).filter(Boolean);
 
 const safeStatus = (value: string | null) => {
-  const statuses: AccountStatus[] = ['Active', 'Disabled', 'Blocklisted'];
+  const statuses: AccountStatus[] = ['ACTIVE', 'DISABLED', 'BLACKLISTED'];
   return statuses.includes(value as AccountStatus)
     ? (value as AccountStatus)
     : undefined;
 };
 
 const safeVerificationStatus = (value: string | null) => {
-  const statuses: VerificationStatus[] = ['Verified', 'Pending', 'Unverified'];
+  const statuses: VerificationStatus[] = ['VERIFIED', 'PENDING', 'UNVERIFIED'];
   return statuses.includes(value as VerificationStatus)
     ? (value as VerificationStatus)
     : undefined;
