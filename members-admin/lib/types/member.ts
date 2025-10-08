@@ -6,10 +6,10 @@ export type Member = {
   id: number;
   name: string;
   verificationStatus: VerificationStatus;
-  email: string;
-  mobile: string;
+  emailAddress: string;
+  mobileNumber: string;
   domain: string;
-  dateRegistered: string;
+  dateTimeCreated: string;
   status: AccountStatus;
-  lastActive: string;
+  dateTimeLastActive: string;
 };

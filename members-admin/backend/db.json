@@ -12,133 +12,133 @@
       "id": 1,
       "name": "Alicia Reyes",
       "verificationStatus": "Verified",
-      "email": "alicia.reyes@scaleforge.tech",
-      "mobile": "+639178020145",
+      "emailAddress": "alicia.reyes@scaleforge.tech",
+      "mobileNumber": "+639178020145",
       "domain": "https://scaleforge.tech",
-      "dateRegistered": "2023-01-12T10:15:00Z",
+      "dateTimeCreated": "2023-01-12T10:15:00Z",
       "status": "Active",
-      "lastActive": "2024-09-12T04:35:20Z"
+      "dateTimeLastActive": "2024-09-12T04:35:20Z"
     },
     {
       "id": 2,
       "name": "Benjamin Cruz",
       "verificationStatus": "Pending",
-      "email": "ben.cruz@crazywin.ph",
-      "mobile": "+639268110973",
+      "emailAddress": "ben.cruz@crazywin.ph",
+      "mobileNumber": "+639268110973",
       "domain": "https://crazywin.ph/19",
-      "dateRegistered": "2022-11-04T07:42:00Z",
+      "dateTimeCreated": "2022-11-04T07:42:00Z",
       "status": "Active",
-      "lastActive": "2024-06-01T16:22:18Z"
+      "dateTimeLastActive": "2024-06-01T16:22:18Z"
     },
     {
       "id": 3,
       "name": "Chloe Dizon",
       "verificationStatus": "Unverified",
-      "email": "chloe.dizon@orbitplay.gg",
-      "mobile": "+639558103221",
+      "emailAddress": "chloe.dizon@orbitplay.gg",
+      "mobileNumber": "+639558103221",
       "domain": "https://orbitplay.gg",
-      "dateRegistered": "2023-05-27T18:09:00Z",
+      "dateTimeCreated": "2023-05-27T18:09:00Z",
       "status": "Disabled",
-      "lastActive": "2024-03-19T11:05:10Z"
+      "dateTimeLastActive": "2024-03-19T11:05:10Z"
     },
     {
       "id": 4,
       "name": "Diego Ramos",
       "verificationStatus": "Verified",
-      "email": "diego.r@bossarena.gg",
-      "mobile": "+639178820987",
+      "emailAddress": "diego.r@bossarena.gg",
+      "mobileNumber": "+639178820987",
       "domain": "https://bossarena.gg",
-      "dateRegistered": "2021-09-01T09:05:00Z",
+      "dateTimeCreated": "2021-09-01T09:05:00Z",
       "status": "Blocklisted",
-      "lastActive": "2024-01-28T02:14:00Z"
+      "dateTimeLastActive": "2024-01-28T02:14:00Z"
     },
     {
       "id": 5,
       "name": "Emma Soriano",
       "verificationStatus": "Verified",
-      "email": "emma@fluxbets.com",
-      "mobile": "+639158991122",
+      "emailAddress": "emma@fluxbets.com",
+      "mobileNumber": "+639158991122",
       "domain": "https://fluxbets.com",
-      "dateRegistered": "2023-07-08T22:08:00Z",
+      "dateTimeCreated": "2023-07-08T22:08:00Z",
       "status": "Active",
-      "lastActive": "2024-09-10T07:45:33Z"
+      "dateTimeLastActive": "2024-09-10T07:45:33Z"
     },
     {
       "id": 6,
       "name": "Felix Navarro",
       "verificationStatus": "Pending",
-      "email": "felix.navarro@scaleforge.tech",
-      "mobile": "+639772308165",
+      "emailAddress": "felix.navarro@scaleforge.tech",
+      "mobileNumber": "+639772308165",
       "domain": "https://scaleforge.tech",
-      "dateRegistered": "2024-01-15T12:32:00Z",
+      "dateTimeCreated": "2024-01-15T12:32:00Z",
       "status": "Disabled",
-      "lastActive": "2024-05-02T08:12:45Z"
+      "dateTimeLastActive": "2024-05-02T08:12:45Z"
     },
     {
       "id": 7,
       "name": "Gina Mercado",
       "verificationStatus": "Verified",
-      "email": "gina.mercado@crazywin.ph",
-      "mobile": "+639418002245",
+      "emailAddress": "gina.mercado@crazywin.ph",
+      "mobileNumber": "+639418002245",
       "domain": "https://crazywin.ph/19",
-      "dateRegistered": "2022-02-20T13:19:00Z",
+      "dateTimeCreated": "2022-02-20T13:19:00Z",
       "status": "Active",
-      "lastActive": "2024-09-18T15:30:11Z"
+      "dateTimeLastActive": "2024-09-18T15:30:11Z"
     },
     {
       "id": 8,
       "name": "Hector Panganiban",
       "verificationStatus": "Unverified",
-      "email": "hector.pan@orbitplay.gg",
-      "mobile": "+639675551209",
+      "emailAddress": "hector.pan@orbitplay.gg",
+      "mobileNumber": "+639675551209",
       "domain": "https://orbitplay.gg",
-      "dateRegistered": "2024-03-03T04:51:00Z",
+      "dateTimeCreated": "2024-03-03T04:51:00Z",
       "status": "Active",
-      "lastActive": "2024-06-30T22:01:59Z"
+      "dateTimeLastActive": "2024-06-30T22:01:59Z"
     },
     {
       "id": 9,
       "name": "Isabel Quinto",
       "verificationStatus": "Verified",
-      "email": "isabel.quinto@vegasfrontier.io",
-      "mobile": "+639921234567",
+      "emailAddress": "isabel.quinto@vegasfrontier.io",
+      "mobileNumber": "+639921234567",
       "domain": "https://vegasfrontier.io",
-      "dateRegistered": "2021-12-11T17:00:00Z",
+      "dateTimeCreated": "2021-12-11T17:00:00Z",
       "status": "Blocklisted",
-      "lastActive": "2023-12-24T19:44:12Z"
+      "dateTimeLastActive": "2023-12-24T19:44:12Z"
     },
     {
       "id": 10,
       "name": "Jasper Uy",
       "verificationStatus": "Pending",
-      "email": "jasper.uy@fluxbets.com",
-      "mobile": "+639377654321",
+      "emailAddress": "jasper.uy@fluxbets.com",
+      "mobileNumber": "+639377654321",
       "domain": "https://fluxbets.com",
-      "dateRegistered": "2022-06-15T06:00:00Z",
+      "dateTimeCreated": "2022-06-15T06:00:00Z",
       "status": "Disabled",
-      "lastActive": "2024-04-20T03:14:45Z"
+      "dateTimeLastActive": "2024-04-20T03:14:45Z"
     },
     {
       "id": 11,
       "name": "Kyla Villanueva",
       "verificationStatus": "Verified",
-      "email": "kyla.villanueva@bossarena.gg",
-      "mobile": "+639198880001",
+      "emailAddress": "kyla.villanueva@bossarena.gg",
+      "mobileNumber": "+639198880001",
       "domain": "https://bossarena.gg",
-      "dateRegistered": "2023-08-31T14:25:00Z",
+      "dateTimeCreated": "2023-08-31T14:25:00Z",
       "status": "Active",
-      "lastActive": "2024-09-16T10:55:00Z"
+      "dateTimeLastActive": "2024-09-16T10:55:00Z"
     },
     {
       "id": 12,
       "name": "Luna Yang",
       "verificationStatus": "Unverified",
-      "email": "luna.yang@vegasfrontier.io",
-      "mobile": "+639181112233",
+      "emailAddress": "luna.yang@vegasfrontier.io",
+      "mobileNumber": "+639181112233",
       "domain": "https://vegasfrontier.io",
-      "dateRegistered": "2024-04-01T09:30:00Z",
+      "dateTimeCreated": "2024-04-01T09:30:00Z",
       "status": "Active",
-      "lastActive": "2024-05-12T08:44:00Z"
+      "dateTimeLastActive": "2024-05-12T08:44:00Z"
     }
   ]
 }

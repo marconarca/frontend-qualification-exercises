@@ -43,7 +43,8 @@ const reversedDateTimeFormatter = new Intl.DateTimeFormat('en-US', {
   hour12: true,
 });
 
-export const formatCurrency = (value: number) => currencyFormatter.format(value);
+export const formatCurrency = (value: number) =>
+  currencyFormatter.format(value);
 
 export const formatDate = (value: string) =>
   dateFormatter.format(new Date(value));
@@ -82,7 +83,7 @@ export const formatPhone = (value: string) => {
 };
 
 export const getVerificationBadgeVariant = (
-  status: Member['verificationStatus'],
+  status: Member['verificationStatus']
 ) => {
   if (status === 'Verified') {
     return 'success';

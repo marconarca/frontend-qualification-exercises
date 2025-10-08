@@ -61,7 +61,9 @@ server.get('/members/search/name', (req, res) => {
 server.get('/members/search/email', (req, res) => {
   const query = (req.query.q || '').toLowerCase();
   const members = query
-    ? filterMembers((member) => member.email.toLowerCase().includes(query))
+    ? filterMembers((member) =>
+        member.emailAddress.toLowerCase().includes(query),
+      )
     : readMembers();
   return res.json(members);
 });
@@ -69,7 +71,9 @@ server.get('/members/search/email', (req, res) => {
 server.get('/members/search/mobile', (req, res) => {
   const query = (req.query.q || '').toLowerCase();
   const members = query
-    ? filterMembers((member) => member.mobile.toLowerCase().includes(query))
+    ? filterMembers((member) =>
+        member.mobileNumber.toLowerCase().includes(query),
+      )
     : readMembers();
   return res.json(members);
 });

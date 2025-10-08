@@ -18,8 +18,8 @@ export const buildFilterOptions = cache(
     members.forEach((member) => {
       names.add(member.name);
       domains.add(member.domain);
-      emails.add(member.email);
-      mobiles.add(member.mobile);
+      emails.add(member.emailAddress);
+      mobiles.add(member.mobileNumber);
     });
 
     const sortAsc = (values: Set<string>) =>

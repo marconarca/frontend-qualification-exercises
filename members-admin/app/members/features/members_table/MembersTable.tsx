@@ -113,13 +113,13 @@ export const MembersTable = ({
               <td className="px-4 py-3">
                 <a
                   className="text-muted underline-offset-4 hover:underline text-[12px]"
-                  href={`mailto:${member.email}`}
+                  href={`mailto:${member.emailAddress}`}
                 >
-                  {member.email}
+                  {member.emailAddress}
                 </a>
               </td>
               <td className="px-4 py-3 text-muted text-[12px]">
-                {formatPhone(member.mobile)}
+                {formatPhone(member.mobileNumber)}
               </td>
               <td className="px-4 py-3">
                 <a
@@ -132,7 +132,7 @@ export const MembersTable = ({
                 </a>
               </td>
               <td className="px-4 py-3 text-muted text-[12px]">
-                {formatReversedDate(member.dateRegistered)}
+                {formatReversedDate(member.dateTimeCreated)}
               </td>
               <td className="px-4 py-3">
                 <Badge
@@ -146,7 +146,7 @@ export const MembersTable = ({
                 </Badge>
               </td>
               <td className="px-4 py-3 text-muted text-[12px]">
-                {formatReversedDateTime(member.lastActive)}
+                {formatReversedDateTime(member.dateTimeLastActive)}
               </td>
             </tr>
           ))}

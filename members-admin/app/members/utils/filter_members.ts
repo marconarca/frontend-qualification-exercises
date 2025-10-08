@@ -48,11 +48,11 @@ const applyFilterLogic = (member: Member, filters: MembersFilter) => {
     return false;
   }
 
-  if (emails.length > 0 && !emails.includes(member.email)) {
+  if (emails.length > 0 && !emails.includes(member.emailAddress)) {
     return false;
   }
 
-  if (mobiles.length > 0 && !mobiles.includes(member.mobile)) {
+  if (mobiles.length > 0 && !mobiles.includes(member.mobileNumber)) {
     return false;
   }
 
@@ -69,14 +69,14 @@ const applyFilterLogic = (member: Member, filters: MembersFilter) => {
 
   if (
     (registeredFrom || registeredTo) &&
-    !isWithinRange(member.dateRegistered, registeredFrom, registeredTo)
+    !isWithinRange(member.dateTimeCreated, registeredFrom, registeredTo)
   ) {
     return false;
   }
 
   if (
     (lastActiveFrom || lastActiveTo) &&
-    !isWithinRange(member.lastActive, lastActiveFrom, lastActiveTo)
+    !isWithinRange(member.dateTimeLastActive, lastActiveFrom, lastActiveTo)
   ) {
     return false;
   }
