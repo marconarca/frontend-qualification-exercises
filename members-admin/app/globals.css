@@ -42,6 +42,10 @@
   color: white;
 }
 
+.rdp-root > div {
+  justify-content: center;
+}
+
 .rdp-root > div > nav {
   order: 2;
 }
@@ -52,4 +56,33 @@
 
 .rdp-root > div > .rdp-month:nth-child(3) {
   order: 3;
+}
+
+input[type='time']::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}
+
+input[type='date'] {
+  position: relative;
+}
+
+input[type='date']::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  position: absolute;
+  right: 10px;
+}
+
+.rdp-today {
+  position: relative;
+}
+.rdp-today::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 6px;
+  width: 6px;
+  border-radius: 9999px;
+  background-color: var(--color-secondary);
 }

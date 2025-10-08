@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils/cn';
 import {
   endOfDay,
@@ -34,8 +34,8 @@ type QuickRange = {
   getRange: () => { range?: DateRange; fromTime?: string; toTime?: string };
 };
 
-const defaultFromTime = '00:00';
-const defaultToTime = '23:59';
+const defaultFromTime = '00:00:00';
+const defaultToTime = '23:59:59';
 
 const normalizeDate = (value?: string) => {
   if (!value) return undefined;
@@ -156,13 +156,16 @@ const quickRanges: QuickRange[] = [
   },
 ];
 
+const formatDisplayDate = (date: Date | undefined) =>
+  date ? format(date, 'MMM d, yyyy') : 'Select date';
+
 const buildDateWithTime = (date: Date | undefined, time: string) => {
   if (!date) return undefined;
-  const [hours = '00', minutes = '00'] = time.split(':');
+  const [hours = '00', minutes = '00', seconds = '00'] = time.split(':');
   const withTime = set(date, {
     hours: Number(hours),
     minutes: Number(minutes),
-    seconds: 0,
+    seconds: Number(seconds),
     milliseconds: 0,
   });
   return withTime;
@@ -175,6 +178,7 @@ export const DateRangePicker = ({
   onClear,
   onClose,
 }: DateRangePickerProps) => {
+  const [open, setOpen] = React.useState(true);
   const initialFromDate = normalizeDate(from);
   const initialToDate = normalizeDate(to);
 
@@ -189,10 +193,10 @@ export const DateRangePicker = ({
   });
 
   const [fromTime, setFromTime] = React.useState(
-    initialFromDate ? format(initialFromDate, 'HH:mm') : defaultFromTime
+    initialFromDate ? format(initialFromDate, 'HH:mm:ss') : defaultFromTime
   );
   const [toTime, setToTime] = React.useState(
-    initialToDate ? format(initialToDate, 'HH:mm') : defaultToTime
+    initialToDate ? format(initialToDate, 'HH:mm:ss') : defaultToTime
   );
   const [selectedQuick, setSelectedQuick] = React.useState<string | null>(null);
 
@@ -211,7 +215,7 @@ export const DateRangePicker = ({
   const handleApply = () => {
     if (!range?.from && !range?.to) {
       onClear();
-      onClose?.();
+      setOpen(false);
       return;
     }
 
@@ -224,7 +228,7 @@ export const DateRangePicker = ({
       from: fromDate?.toISOString(),
       to: toDate?.toISOString(),
     });
-    onClose?.();
+    setOpen(false);
   };
 
   const handleCancel = () => {
@@ -234,24 +238,37 @@ export const DateRangePicker = ({
         : undefined
     );
     setFromTime(
-      initialFromDate ? format(initialFromDate, 'HH:mm') : defaultFromTime
+      initialFromDate ? format(initialFromDate, 'HH:mm:ss') : defaultFromTime
     );
-    setToTime(initialToDate ? format(initialToDate, 'HH:mm') : defaultToTime);
+    setToTime(
+      initialToDate ? format(initialToDate, 'HH:mm:ss') : defaultToTime
+    );
     setSelectedQuick(null);
-    onClose?.();
+    setOpen(false);
   };
 
   const handleClear = () => {
     setRange(undefined);
     setSelectedQuick('all-time');
     onClear();
-    onClose?.();
+    setOpen(false);
   };
 
   return (
-    <Dialog defaultOpen onOpenChange={(open) => !open && onClose?.()}>
-      <DialogContent className="flex min-h-[420px] min-w-[640px] gap-6 bg-background text-sm text-muted">
-        <aside className="w-36 space-y-1 border-r border-neutral/30 pr-3 pt-3 pl-3">
+    <Dialog
+      open={open}
+      onOpenChange={(next) => {
+        setOpen(next);
+        if (!next) {
+          onClose?.();
+        }
+      }}
+    >
+      <DialogContent className="flex min-h-[400px] min-w-[900px] bg-background text-sm text-muted">
+        <DialogTitle className="sr-only">
+          Select last active date range
+        </DialogTitle>
+        <aside className="w-40 space-y-1 border-r border-neutral/30 px-3 py-3">
           {quickRanges.map((quick) => (
             <button
               key={quick.id}
@@ -285,7 +302,7 @@ export const DateRangePicker = ({
             defaultMonth={range?.from ?? new Date()}
             pagedNavigation
             showOutsideDays
-            className="rounded-md bg-background p-4 text-neutral"
+            className="rounded-lg bg-background p-4 text-neutral"
             classNames={{
               months: 'flex gap-6',
               caption:
@@ -310,34 +327,44 @@ export const DateRangePicker = ({
             }}
           />
 
-          <div className="flex items-center justify-between gap-3">
-            <div className="flex items-center gap-2">
-              <label className="text-xs uppercase text-muted">From</label>
+          <div className="flex items-center justify-between gap-3 border-t border-neutral/30 pt-4 pr-4 pl-4">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="rounded-md border border-neutral/30 bg-background px-4 py-2 text-[12px] text-foreground">
+                {formatDisplayDate(range?.from)}
+              </span>
               <input
                 type="time"
+                step={1}
                 value={fromTime}
                 onChange={(event) => setFromTime(event.target.value)}
-                className="rounded-md border border-neutral/30 bg-background-secondary/60 px-3 py-2 text-sm text-neutral"
+                className="w-28 rounded-md border border-neutral/30 bg-background px-3 py-2 text-[12px] text-foreground"
               />
-            </div>
-            <div className="flex items-center gap-2">
-              <label className="text-xs uppercase text-muted">To</label>
+              <span className="px-2 text-muted">-</span>
+              <span className="rounded-md border border-neutral/30 bg-background px-4 py-2 text-[12px] text-foreground">
+                {formatDisplayDate(range?.to)}
+              </span>
               <input
                 type="time"
+                step={1}
                 value={toTime}
                 onChange={(event) => setToTime(event.target.value)}
-                className="rounded-md border border-neutral/30 bg-background-secondary/60 px-3 py-2 text-sm text-neutral"
+                className="w-28 rounded-md border border-neutral/30 bg-background px-3 py-2 text-[12px] text-foreground"
               />
             </div>
-          </div>
 
-          <div className="flex justify-end gap-2">
-            <Button variant="transparent" type="button" onClick={handleCancel}>
-              Cancel
-            </Button>
-            <Button type="button" onClick={handleApply}>
-              Apply
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="transparent"
+                type="button"
+                onClick={handleCancel}
+                className="border border-secondary px-4 text-secondary"
+              >
+                Cancel
+              </Button>
+              <Button type="button" onClick={handleApply} className="px-6">
+                Apply
+              </Button>
+            </div>
           </div>
         </div>
       </DialogContent>
