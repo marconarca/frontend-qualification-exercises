@@ -151,6 +151,27 @@ export const useMembersData = () => {
     setFilters((state) => {
       const next: MembersFilter = { ...state, ...partial };
 
+      const dedupe = (values: string[]) => {
+        const seen = new Set<string>();
+        return values
+          .map((value) => value.trim())
+          .filter((value) => {
+            if (!value) {
+              return false;
+            }
+            if (seen.has(value)) {
+              return false;
+            }
+            seen.add(value);
+            return true;
+          });
+      };
+
+      next.names = dedupe(next.names);
+      next.emails = dedupe(next.emails);
+      next.mobiles = dedupe(next.mobiles);
+      next.domains = dedupe(next.domains);
+
       const hasNames = next.names.length > 0;
       const hasEmails = next.emails.length > 0;
       const hasMobiles = next.mobiles.length > 0;

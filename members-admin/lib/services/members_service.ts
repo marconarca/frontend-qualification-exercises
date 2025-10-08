@@ -5,18 +5,20 @@ import type {
   VerificationStatus,
 } from '@/lib/types/member';
 
+type GraphqlMember = {
+  id: string | null;
+  name: string | null;
+  verificationStatus: VerificationStatus | null;
+  emailAddress: string | null;
+  mobileNumber: string | null;
+  domain: string | null;
+  dateTimeCreated: string | null;
+  dateTimeLastActive: string | null;
+  status: AccountStatus | null;
+};
+
 type MemberEdge = {
-  node: {
-    id: string;
-    name: string | null;
-    verificationStatus: VerificationStatus | null;
-    emailAddress: string | null;
-    mobileNumber: string | null;
-    domain: string | null;
-    dateTimeCreated: string | null;
-    dateTimeLastActive: string | null;
-    status: AccountStatus | null;
-  };
+  node: GraphqlMember;
 };
 
 type MembersQuery = {
@@ -27,6 +29,18 @@ type MembersQuery = {
       endCursor?: string | null;
     };
   };
+};
+
+type MembersByNameQuery = {
+  membersByName?: GraphqlMember[] | null;
+};
+
+type MembersByEmailQuery = {
+  membersByEmailAddress?: GraphqlMember[] | null;
+};
+
+type MembersByMobileQuery = {
+  membersByMobileNumber?: GraphqlMember[] | null;
 };
 
 type GraphqlResponse<T> = {
@@ -48,6 +62,17 @@ export type GraphqlFilter = {
   };
 };
 
+const MEMBER_FIELDS = `
+  name
+  verificationStatus
+  emailAddress
+  mobileNumber
+  domain
+  dateTimeCreated
+  dateTimeLastActive
+  status
+`;
+
 const MEMBERS_QUERY = `
   query Members(
     $first: Int = 50
@@ -59,14 +84,7 @@ const MEMBERS_QUERY = `
         node {
           id
           ... on Member {
-            name
-            verificationStatus
-            emailAddress
-            mobileNumber
-            domain
-            dateTimeCreated
-            dateTimeLastActive
-            status
+            ${MEMBER_FIELDS}
           }
         }
       }
@@ -78,7 +96,40 @@ const MEMBERS_QUERY = `
   }
 `;
 
-const mapMember = (edge: MemberEdge): Member => {
+const MEMBERS_BY_NAME_QUERY = `
+  query MembersByName($search: String!, $first: Int = 20) {
+    membersByName(search: $search, first: $first) {
+      id
+      ... on Member {
+        ${MEMBER_FIELDS}
+      }
+    }
+  }
+`;
+
+const MEMBERS_BY_EMAIL_QUERY = `
+  query MembersByEmail($search: String!, $first: Int = 10) {
+    membersByEmailAddress(search: $search, first: $first) {
+      id
+      ... on Member {
+        ${MEMBER_FIELDS}
+      }
+    }
+  }
+`;
+
+const MEMBERS_BY_MOBILE_QUERY = `
+  query MembersByMobile($search: String!, $first: Int = 10) {
+    membersByMobileNumber(search: $search, first: $first) {
+      id
+      ... on Member {
+        ${MEMBER_FIELDS}
+      }
+    }
+  }
+`;
+
+const mapMemberNode = (node: GraphqlMember): Member => {
   const {
     id,
     name,
@@ -89,7 +140,7 @@ const mapMember = (edge: MemberEdge): Member => {
     dateTimeCreated,
     dateTimeLastActive,
     status,
-  } = edge.node;
+  } = node;
 
   if (!id || !name || !verificationStatus || !status) {
     throw new Error('Incomplete member data received from GraphQL API');
@@ -110,6 +161,7 @@ const mapMember = (edge: MemberEdge): Member => {
 
 const executeGraphql = async <T>(
   token: string,
+  query: string,
   variables: Record<string, unknown>,
 ): Promise<T> => {
   const response = await fetch(getGraphqlEndpoint(), {
@@ -119,7 +171,7 @@ const executeGraphql = async <T>(
       Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({
-      query: MEMBERS_QUERY,
+      query,
       variables,
     }),
   });
@@ -129,18 +181,17 @@ const executeGraphql = async <T>(
   }
 
   if (!response.ok) {
-    throw new Error(`GraphQL request failed with status ${response.status}`);
+    throw new Error('UNAUTHORIZED');
   }
 
   const payload = (await response.json()) as GraphqlResponse<T>;
 
   if (payload.errors?.length) {
-    console.error('GraphQL errors', payload.errors);
     throw new Error('UNAUTHORIZED');
   }
 
   if (!payload.data) {
-    throw new Error('GraphQL response missing data');
+    throw new Error('UNAUTHORIZED');
   }
 
   return payload.data;
@@ -156,7 +207,7 @@ export const fetchMembers = async (
   let safetyCounter = 0;
 
   while (hasNextPage) {
-    const data = await executeGraphql<MembersQuery>(token, {
+    const data = await executeGraphql<MembersQuery>(token, MEMBERS_QUERY, {
       first: 50,
       after,
       filter,
@@ -164,7 +215,7 @@ export const fetchMembers = async (
 
     const edges = data.members?.edges ?? [];
     edges.forEach((edge) => {
-      members.push(mapMember(edge));
+      members.push(mapMemberNode(edge.node));
     });
 
     hasNextPage = Boolean(data.members?.pageInfo?.hasNextPage);
@@ -172,9 +223,47 @@ export const fetchMembers = async (
 
     safetyCounter += 1;
     if (safetyCounter > 20) {
-      throw new Error('Too many GraphQL pagination requests');
+      throw new Error('UNAUTHORIZED');
     }
   }
 
   return members;
 };
+
+const searchMembers = async (
+  token: string,
+  query: string,
+  search: string,
+  first: number,
+): Promise<Member[]> => {
+  const trimmed = search.trim();
+  if (!trimmed) {
+    return [];
+  }
+
+  const data = await executeGraphql<
+    MembersByNameQuery | MembersByEmailQuery | MembersByMobileQuery
+  >(token, query, {
+    search: trimmed,
+    first,
+  });
+
+  const collection =
+    (data as MembersByNameQuery).membersByName ??
+    (data as MembersByEmailQuery).membersByEmailAddress ??
+    (data as MembersByMobileQuery).membersByMobileNumber ??
+    [];
+
+  return collection
+    .filter((node): node is GraphqlMember => node !== null && typeof node === 'object')
+    .map(mapMemberNode);
+};
+
+export const searchMembersByName = (token: string, search: string) =>
+  searchMembers(token, MEMBERS_BY_NAME_QUERY, search, 20);
+
+export const searchMembersByEmail = (token: string, search: string) =>
+  searchMembers(token, MEMBERS_BY_EMAIL_QUERY, search, 10);
+
+export const searchMembersByMobile = (token: string, search: string) =>
+  searchMembers(token, MEMBERS_BY_MOBILE_QUERY, search, 10);

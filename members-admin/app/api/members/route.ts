@@ -1,8 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
-import { fetchMembers } from '@/lib/services/members_service';
+import {
+  fetchMembers,
+  searchMembersByEmail,
+  searchMembersByMobile,
+  searchMembersByName,
+} from '@/lib/services/members_service';
 import type { GraphqlFilter } from '@/lib/services/members_service';
-import { ADMIN_TOKEN_COOKIE } from '@/lib/config/auth';
+import { ADMIN_NAME_COOKIE, ADMIN_TOKEN_COOKIE } from '@/lib/config/auth';
 import type {
   MembersFilter,
   PaginationState,
@@ -13,6 +18,7 @@ import {
   paginateMembers,
 } from '@/app/members/utils/filter_members';
 import { buildFilterOptions } from '@/lib/utils/filter_cache';
+import { uniqueMembers } from '@/app/members/utils/collection';
 
 export const dynamic = 'force-dynamic';
 
@@ -81,50 +87,70 @@ export const GET = async (request: NextRequest) => {
   const lastActiveFrom = searchParams.get('lastActiveFrom') ?? undefined;
   const lastActiveTo = searchParams.get('lastActiveTo') ?? undefined;
 
+  const hasNameFilters = names.length > 0;
+  const hasEmailFilters = emails.length > 0;
+  const hasMobileFilters = mobiles.length > 0;
+
   const graphqlFilter: GraphqlFilter = {};
 
-  if (statuses.length > 0) {
-    graphqlFilter.status = { in: statuses };
-  }
+  if (!hasNameFilters && !hasEmailFilters && !hasMobileFilters) {
+    if (statuses.length > 0) {
+      graphqlFilter.status = { in: statuses };
+    }
 
-  if (verificationStatuses.length > 0) {
-    graphqlFilter.verificationStatus = { in: verificationStatuses };
-  }
+    if (verificationStatuses.length > 0) {
+      graphqlFilter.verificationStatus = { in: verificationStatuses };
+    }
 
-  const normalizedDomains = domains.filter(Boolean);
-  if (normalizedDomains.length > 0) {
-    graphqlFilter.domain = { in: normalizedDomains };
-  }
+    const normalizedDomains = domains.filter(Boolean);
+    if (normalizedDomains.length > 0) {
+      graphqlFilter.domain = { in: normalizedDomains };
+    }
 
-  if (registeredFrom || registeredTo) {
-    graphqlFilter.dateTimeCreated = {
-      ...(registeredFrom ? { greaterThanOrEqual: registeredFrom } : {}),
-      ...(registeredTo ? { lesserThanOrEqual: registeredTo } : {}),
-    };
-  }
+    if (registeredFrom || registeredTo) {
+      graphqlFilter.dateTimeCreated = {
+        ...(registeredFrom ? { greaterThanOrEqual: registeredFrom } : {}),
+        ...(registeredTo ? { lesserThanOrEqual: registeredTo } : {}),
+      };
+    }
 
-  if (lastActiveFrom || lastActiveTo) {
-    graphqlFilter.dateTimeLastActive = {
-      ...(lastActiveFrom ? { greaterThanOrEqual: lastActiveFrom } : {}),
-      ...(lastActiveTo ? { lesserThanOrEqual: lastActiveTo } : {}),
-    };
+    if (lastActiveFrom || lastActiveTo) {
+      graphqlFilter.dateTimeLastActive = {
+        ...(lastActiveFrom ? { greaterThanOrEqual: lastActiveFrom } : {}),
+        ...(lastActiveTo ? { lesserThanOrEqual: lastActiveTo } : {}),
+      };
+    }
   }
 
   let allMembers;
   try {
-    allMembers = await fetchMembers(
-      token,
-      Object.keys(graphqlFilter).length > 0 ? graphqlFilter : undefined,
-    );
+    if (hasNameFilters) {
+      const results = await Promise.all(
+        names.map((entry) => searchMembersByName(token, entry)),
+      );
+      allMembers = uniqueMembers(results.flat());
+    } else if (hasEmailFilters) {
+      const results = await Promise.all(
+        emails.map((entry) => searchMembersByEmail(token, entry)),
+      );
+      allMembers = uniqueMembers(results.flat());
+    } else if (hasMobileFilters) {
+      const results = await Promise.all(
+        mobiles.map((entry) => searchMembersByMobile(token, entry)),
+      );
+      allMembers = uniqueMembers(results.flat());
+    } else {
+      allMembers = await fetchMembers(
+        token,
+        Object.keys(graphqlFilter).length > 0 ? graphqlFilter : undefined,
+      );
+    }
   } catch (error) {
     console.error(error);
-    const message = (error as Error).message ?? 'Failed to load members';
-    const status = message === 'UNAUTHORIZED' ? 401 : 500;
-    const response =
-      status === 401
-        ? { message: 'Unauthorized' }
-        : { message: 'Failed to load members' };
-    return NextResponse.json(response, { status });
+    const storeToClear = cookies();
+    storeToClear.delete(ADMIN_TOKEN_COOKIE);
+    storeToClear.delete(ADMIN_NAME_COOKIE);
+    return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
   }
 
   const filterOptions = buildFilterOptions(allMembers);
