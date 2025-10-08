@@ -179,6 +179,7 @@ export const DateRangePicker = ({
   onClose,
 }: DateRangePickerProps) => {
   const [open, setOpen] = React.useState(true);
+  const wasOpenRef = React.useRef(open);
   const initialFromDate = normalizeDate(from);
   const initialToDate = normalizeDate(to);
 
@@ -254,16 +255,15 @@ export const DateRangePicker = ({
     setOpen(false);
   };
 
+  React.useEffect(() => {
+    if (wasOpenRef.current && !open) {
+      onClose?.();
+    }
+    wasOpenRef.current = open;
+  }, [open, onClose]);
+
   return (
-    <Dialog
-      open={open}
-      onOpenChange={(next) => {
-        setOpen(next);
-        if (!next) {
-          onClose?.();
-        }
-      }}
-    >
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="flex min-h-[400px] min-w-[900px] bg-background text-sm text-muted">
         <DialogTitle className="sr-only">
           Select last active date range
