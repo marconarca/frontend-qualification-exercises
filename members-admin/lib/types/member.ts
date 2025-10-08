@@ -6,7 +6,6 @@ export type Member = {
   id: number;
   name: string;
   verificationStatus: VerificationStatus;
-  balance: number;
   email: string;
   mobile: string;
   domain: string;

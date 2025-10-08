@@ -4,7 +4,6 @@ import { Badge } from '@/components/ui/badge';
 import type { Member } from '@/lib/types/member';
 import { cn } from '@/lib/utils/cn';
 import {
-  formatCurrency,
   formatPhone,
   formatReversedDate,
   formatReversedDateTime,
@@ -22,7 +21,6 @@ type MembersTableProps = {
 const headers = [
   'Name',
   'Verification',
-  'Balance',
   'Email',
   'Mobile',
   'Domain',
@@ -111,9 +109,6 @@ export const MembersTable = ({
                   />
                   <span>{member.verificationStatus}</span>
                 </Badge>
-              </td>
-              <td className="px-4 py-3 text-muted text-[12px]">
-                {formatCurrency(member.balance)}
               </td>
               <td className="px-4 py-3">
                 <a
